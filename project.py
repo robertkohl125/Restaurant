@@ -11,9 +11,29 @@ DBSession = sessionmaker(bind = engine)
 session = DBSession()
 
 @app.route('/') #decorator function allowing the website to be found at the "root"
-@app.route('/hello') #decorator function allowing the website to be found at "/hello" also
+@app.route('/restaurants/<int:restaurant_id>/') #decorator function allowing the website to be found at "/hello" also
 #decorator functions can be stacked
-def HelloWorld():
+def restaurantMenu(restaurant_id):
+	restaurant = session.query(Restaurant).first()
+	items = session.query(MenuItem).filter_by(restaurant_id = restaurant.restaurant_id)
+	output = ''
+	output += '<h2>'
+	output += restaurant.name
+	output += '</h2>' 
+	for i in items:
+		output += i.name
+		output += '</br>'
+		output += i.price
+		output += '</br>'
+		output += i.description
+		output += "</br>"
+		output += "<a href='/restaurants/%s/edit'>Edit</a>" % i.restaurant_id
+		output += "</br>"
+		output += "<a href='/restaurants/%s/delete'>Delete</a>" % i.restaurant_id
+		output += "</br></br></br>"
+	return output
+
+def newMenuItem(restaurant_id):
 	restaurant = session.query(Restaurant).first()
 	items = session.query(MenuItem).filter_by(restaurant_id = restaurant.restaurant_id)
 	output = ''
@@ -29,6 +49,43 @@ def HelloWorld():
 		output += '</br>'
 		output += '</br>'
 	return output
+    return "page to create a new menu item. Task 1 complete!"
+
+def editMenuItem(restaurant_id):
+	restaurant = session.query(Restaurant).first()
+	items = session.query(MenuItem).filter_by(restaurant_id = restaurant.restaurant_id)
+	output = ''
+	output += '<h2>'
+	output += restaurant.name
+	output += '</h2>' 
+	for i in items:
+		output += i.name
+		output += '</br>'
+		output += i.price
+		output += '</br>'
+		output += i.description
+		output += '</br>'
+		output += '</br>'
+	return output
+    return "page to create a new menu item. Task 1 complete!"
+
+def deleteMenuItem(restaurant_id):
+	restaurant = session.query(Restaurant).first()
+	items = session.query(MenuItem).filter_by(restaurant_id = restaurant.restaurant_id)
+	output = ''
+	output += '<h2>'
+	output += restaurant.name
+	output += '</h2>' 
+	for i in items:
+		output += i.name
+		output += '</br>'
+		output += i.price
+		output += '</br>'
+		output += i.description
+		output += '</br>'
+		output += '</br>'
+	return output
+    return "page to create a new menu item. Task 1 complete!"
 
 if __name__ == '__main__':
 	app.debug = True
