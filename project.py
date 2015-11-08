@@ -80,7 +80,7 @@ def newMenuItem(restaurant_id):
 
 
 @app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/edit')
-def editMenuItem(restaurant_id,menu_id):
+def editMenuItem(restaurant_id, menu_id):
 	restaurant = session.query(Restaurant).first()
 	items = session.query(MenuItem).filter_by(restaurant_id = restaurant.restaurant_id, menu_id = menu_id)
 	output = ''
@@ -104,7 +104,7 @@ def editMenuItem(restaurant_id,menu_id):
 
 
 @app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/delete')
-def deleteMenuItem(restaurant_id,menu_id):
+def deleteMenuItem(restaurant_id, menu_id):
 	restaurant = session.query(Restaurant).first()
 	items = session.query(MenuItem).filter_by(restaurant_id = restaurant.restaurant_id, menu_id = menu_id)
 	output = ''
