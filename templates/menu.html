@@ -2,7 +2,8 @@
 	<body>
 		{% for r in restaurant %}
 		<h2>{{r.name}}</h2>
-		<a href='{{url_for('newMenuItem', restaurant_id = r.restaurant_id)}}'>*Click here to add New Item*</a>
+		<a href='{{url_for('restaurants')}}'>Click here to return to list of Restaurants.</a></br>
+		<h3><a href='{{url_for('newMenuItem', restaurant_id = r.restaurant_id)}}'>*Click here to add New Item*</a></h3>
 		{% endfor %}
 		{% for i in items %}
 		<h3>{{i.course}}</h3>

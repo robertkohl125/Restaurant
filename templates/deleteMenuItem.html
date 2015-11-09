@@ -1,6 +1,8 @@
 <html>
 	<body>
-		<h2>{{restaurant.name}}</h2>
+		{% for r in restaurant %}
+		<h2>{{r.name}}</h2>
+		{% endfor %}
 		{%for i in items%}		
 		<h3>{{i.name}}</h3> 
 		{{i.course}}<br>
@@ -11,10 +13,9 @@
 		<form method ='POST' enctype ='multipart/form-data' actions='/deleteitem'>
 		<input type='submit' value='Delete'>
 		</form>
-		</br>
-		</br>
 		{% endfor %}
-		</br>
-		</br>
+		{% for r in restaurant %}
+		<a href='{{url_for('restaurantMenu', restaurant_id = r.restaurant_id)}}'>Cancel and return to menu.</a>
+		{% endfor %}
 	</body>
 </html>

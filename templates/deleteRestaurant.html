@@ -8,10 +8,7 @@
 		<form method ='POST' enctype ='multipart/form-data' actions='/deleterestaurant'>
 		<input type='submit' value='Delete'>
 		</form>
-		</br>
-		</br>
 		{% endfor %}
-		</br>
-		</br>
+		<a href='{{url_for('restaurants')}}'>Cancel and return to list of Restaurants.</a>
 	</body>
 </html>

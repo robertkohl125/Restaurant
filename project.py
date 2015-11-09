@@ -40,7 +40,6 @@ def newRestaurant():
 	restaurant = session.query(Restaurant)
 	if request.method == 'POST':
 		newRestaurantName = Restaurant(name = request.form['new_name'])
-#		r = Restaurant(newRestaurantName)
 		session.add(newRestaurantName)
 		session.commit
 		return redirect(url_for('restaurants'))
@@ -130,8 +129,8 @@ def editMenuItem(restaurant_id, menu_id):
 #shows the form for deleting menu items for a selected restaurant
 @app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/deleteitem/', methods = ['GET','POST'])
 def deleteMenuItem(restaurant_id, menu_id):
-	restaurant = session.query(Restaurant).first()
-	items = session.query(MenuItem).filter_by(restaurant_id = restaurant.restaurant_id, menu_id = menu_id)
+	restaurant = session.query(Restaurant).filter_by(restaurant_id = restaurant_id)
+	items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id, menu_id = menu_id)
 	if request.method == 'POST':
 		for i in items:
 			deleteItem = MenuItem(menu_id = menu_id)
