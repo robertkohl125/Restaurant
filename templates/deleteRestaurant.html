@@ -1,0 +1,17 @@
+<html>
+	<body>
+		<h2>{{restaurant.name}}</h2>
+		{%for r in restaurant%}		
+		<h3>{{r.name}}</h3> 
+		Confirm that you want to delete this restaurant.
+		<br>CANNOT BE UNDONE!
+		<form method ='POST' enctype ='multipart/form-data' actions='/deleterestaurant'>
+		<input type='submit' value='Delete'>
+		</form>
+		</br>
+		</br>
+		{% endfor %}
+		</br>
+		</br>
+	</body>
+</html>

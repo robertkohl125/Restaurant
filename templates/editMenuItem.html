@@ -1,0 +1,25 @@
+<html>
+	<body>
+		{% for r in restaurant %}
+		<h2>{{restaurant.name}}</h2>
+		{% endfor %}
+		{% for i in items %}		
+		<h3>{{i.name}}</h3> 
+		{{i.course}}<br>
+		{{i.description}}<br>
+		{{i.price}}<br><br><br>
+		{% endfor %}
+		<form method ='POST' enctype ='multipart/form-data' actions='/edititem'>
+		*New name: <input type='text' name='new_name' ><br>
+		*New course: <input type='text' name='new_course' ><br>
+		*New description: <input type='text' name='new_description' ><br>
+		*New price: <input type='text' name='new_price' ><br>
+		<input type='submit' value='Edit'>
+		</form>
+		</br>
+		</br>
+
+		</br>
+		</br>
+	</body>
+</html>

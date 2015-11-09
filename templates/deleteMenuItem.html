@@ -1,0 +1,20 @@
+<html>
+	<body>
+		<h2>{{restaurant.name}}</h2>
+		{%for i in items%}		
+		<h3>{{i.name}}</h3> 
+		{{i.course}}<br>
+		{{i.description}}<br>
+		{{i.price}}<br><br><br>
+		Confirm that you want to delete the menu item.
+		<br>CANNOT BE UNDONE!
+		<form method ='POST' enctype ='multipart/form-data' actions='/deleteitem'>
+		<input type='submit' value='Delete'>
+		</form>
+		</br>
+		</br>
+		{% endfor %}
+		</br>
+		</br>
+	</body>
+</html>

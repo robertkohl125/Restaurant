@@ -1,0 +1,16 @@
+<html>
+	<body>
+		<h2>{{restaurant.name}}</h2>
+		{%for r in restaurant%}		
+		<h3>{{r.name}}</h3> 
+		<form method ='POST' enctype ='multipart/form-data' actions='/editrestaurant'>
+		*New name: <input type='text' name='new_name' ><br>
+		<input type='submit' value='Edit'>
+		</form>
+		</br>
+		</br>
+		{% endfor %}
+		</br>
+		</br>
+	</body>
+</html>
