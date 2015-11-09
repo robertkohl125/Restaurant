@@ -1,6 +1,8 @@
 <html>
 	<body>
-		<h2>{{restaurant.name}}</h2>
+		{% for r in restaurant %}
+		<h2>{{r.name}}</h2>
+		{% endfor %}
 		<div>
 		<form method ='post' enctype ='multipart/form-data' actions='/new'>
 		New Menu Item Name: <input type='text' name='name' ><br>

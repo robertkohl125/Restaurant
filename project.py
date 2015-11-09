@@ -39,11 +39,9 @@ def restaurants():
 def newRestaurant():
 	restaurant = session.query(Restaurant)
 	if request.method == 'POST':
-		newRestaurantName = MenuItem(
-			name = request.form['new_name'])
-		for r in restaurant:
-			r.name = editRestaurantName.name
-		session.add(r)
+		newRestaurantName = Restaurant(name = request.form['new_name'])
+#		r = Restaurant(newRestaurantName)
+		session.add(newRestaurantName)
 		session.commit
 		return redirect(url_for('restaurants'))
 	else:
@@ -55,8 +53,7 @@ def newRestaurant():
 def editRestaurant(restaurant_id):
 	restaurant = session.query(Restaurant).filter_by(restaurant_id = restaurant_id)
 	if request.method == 'POST':
-		editRestaurantName = MenuItem(
-			name = request.form['new_name'])
+		editRestaurantName = MenuItem(name = request.form['new_name'])
 		for r in restaurant:
 			r.name = editRestaurantName.name
 		session.add(r)
@@ -92,8 +89,8 @@ def restaurantMenu(restaurant_id):
 #shows the form for creating a new menu item for a selected restaurant
 @app.route('/restaurants/<int:restaurant_id>/menu/newitem/', methods = ['GET','POST'])
 def newMenuItem(restaurant_id):
-	restaurant = session.query(Restaurant).filter_by(restaurant_id=Restaurant.restaurant_id).first()
-	items = session.query(MenuItem).filter_by(restaurant_id = restaurant.restaurant_id)
+	restaurant = session.query(Restaurant).filter_by(restaurant_id=restaurant_id)
+	items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id)
 	if request.method == 'POST':
 		newItem = MenuItem(name = request.form['name'], 
 			course = request.form['course'],
