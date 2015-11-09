@@ -3,6 +3,17 @@
 		{% for r in restaurant %}
 		<h2>{{r.name}}</h2>
 		<a href='{{url_for('restaurants')}}'>Click here to return to list of Restaurants.</a></br>
+
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				<ul>
+				{% for message in messages %}
+					<li> <strong> {{message}} </strong> </li>
+				{% endfor %}
+				</ul>
+			{% endif %}
+		{% endwith %}
+
 		<h3><a href='{{url_for('newMenuItem', restaurant_id = r.restaurant_id)}}'>*Click here to add New Item*</a></h3>
 		{% endfor %}
 		{% for i in items %}
