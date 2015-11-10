@@ -1,4 +1,7 @@
 <html>
+<head>	
+	<link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css') }}"
+</head>
 	<body>
 		<h1>Restaurants:</h1></br>
 		{% with messages = get_flashed_messages() %}
@@ -16,8 +19,8 @@
 			{{r.name}}
 			</h3>
 			<a href='{{url_for('restaurantMenu', restaurant_id = r.restaurant_id)}}'>View Menu</a>
-			<a href='{{url_for('editRestaurant', restaurant_id = r.restaurant_id)}}'>Edit Menu</a>
-			<a href='{{url_for('deleteRestaurant', restaurant_id = r.restaurant_id)}}'>Delete Menu</a>
+			<a href='{{url_for('editRestaurant', restaurant_id = r.restaurant_id)}}'>Edit</a>
+			<a href='{{url_for('deleteRestaurant', restaurant_id = r.restaurant_id)}}'>Delete</a>
 			</br></br></br>
 		{% endfor %}
 	</body>

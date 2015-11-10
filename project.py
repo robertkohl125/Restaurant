@@ -18,26 +18,6 @@ def restaurants():
 	return render_template('restaurants.html', restaurants = restaurants)
 
 
-
-'''	output = ""
-	output += "<h1>Restaurants:</h1></br>"
-	output += "<h3><a href='/restaurants/newrestaurant'> To add a restaurant, click here. </a></br></br></h3>"
-	output += "</br>"
-	output += "<html><body>"
-	for r in restaurants:
-		output += "<h3>"
-		output += r.name
-		output += "</h3>"
-		output += "<a href='/restaurants/%s'>View Menu</a>" % r.restaurant_id
-		output += " "
-		output += "<a href='/restaurants/%s/editrestaurant'>Edit</a>" % r.restaurant_id
-		output += " "
-		output += "<a href='/restaurants/%s/deleterestaurant'>Delete</a>" % r.restaurant_id
-		output += "</br></br></br>"
-	output += "</body></html>"
-	return output
-'''
-
 #shows the form for creating a new restaurant
 @app.route('/restaurants/newrestaurant', methods = ['GET','POST'])
 def newRestaurant():
