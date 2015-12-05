@@ -13,7 +13,8 @@
 				</ul>
 			{% endif %}
 		{% endwith %}
-		<h3><a href='{{url_for('restaurantNew')}}'> To add a restaurant, click here.</a></br></br></h3>
+		<h3><a href='{{url_for('restaurantNew')}}'> To add a restaurant, click here.</a></br></h3>
+		<h3><a href='{{url_for('gdisconnect')}}'> To log out, click here.</a></br></h3>
 		{% for r in restaurants %}
 			<h3>
 			{{r.name}}

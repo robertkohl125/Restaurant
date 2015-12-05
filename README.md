@@ -1,7 +1,7 @@
 Restaurant
 ==========
 
-This project sets up a restaurant website using a database. The repository contains the restaurantDBsetup.py that sets up the database, the lotsOfMenus.py that populates my database with restaurants and menus, and two programs that create a web server. webserver.py demonstrates some basic HTML GET and POST functions on port 8080, and project.py creates a more well developed web server on port 5000. project.py also utilizes CSS style sheets and JSON returns.
+This project sets up a restaurant website using a database. The repository contains the restaurantDBsetup.py that sets up the database, the lotsOfMenus.py that populates my database with restaurants and menus, and two programs that create a web server. webserver.py demonstrates some basic HTML GET and POST functions on port 8080, and project.py creates a more well developed web server on port 5000. project.py also utilizes CSS style sheets, JSON returns and utilizes the Google+ API for login.
 
 Technology
 ----------
@@ -17,11 +17,13 @@ Special modules:
 Files
 -----
 -ReadMe.md
+-client_secrets.json
 -lotsOfMenus.py
 -project.py
 -restaurantCRUD.py
 -restaurantDBSetup.py
 -webserver.py
+-templates/login.html
 -templates/menu.html
 -templates/menuDelete.html
 -templates/menuEdit.html
