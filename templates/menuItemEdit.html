@@ -11,12 +11,12 @@
 		<p>{{i.course}}<br>
 		{{i.description}}<br>
 		{{i.price}}<br>
-		<fieldset>
 		<legend>Edit Menu Item</legend>
+
 		<form method ='POST' enctype ='multipart/form-data' actions='/edititem'>
 		<p>New name:<input type='text' placeholder={{i.name}} name='new_name' required><br><br></p>
 		<p>New course:
-			<select type='text' name='course' >
+			<select type='text' name='new_course' >
 				<option value="Breakfast">Breakfast</option>
 				<option value="Appetizer">Appetizer</option>
 				<option value="Lunch">Lunch</option>
@@ -25,11 +25,10 @@
 			</select> <br></p>
 		<p>New description:<input type='text' placeholder={{i.description}} name='new_description' required><br></p>
 		<p>New price:<input type='text' placeholder={{i.price}} name='new_price' required></p>
-
 		<input type='submit' value='Edit'>
 		<input type='reset' value='Reset'>	
-		</fieldset>
 		</form>
+
 		</p>
 		{% endfor %}
 		{% for r in restaurant %}

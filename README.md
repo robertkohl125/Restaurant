@@ -13,6 +13,13 @@ Special modules:
 	-FLask
 -Oracle VM VirtualBox 5.0.4
 -Vagrant 1.7.4
+-Google+ OAuth2 API
+-Facebook OAuth2 API
+
+Bugs
+----
+Facebook login working but not passing login as user.
+
 
 Files
 -----

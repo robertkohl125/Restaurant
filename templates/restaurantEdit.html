@@ -7,7 +7,7 @@
 		{%for r in restaurant%}		
 		<h3>{{r.name}}</h3> 
 		<form method ='POST' enctype ='multipart/form-data' actions='/restaurantedit'>
-		*New name: <input type='text' placeholder={{r.name}} name='new_name' ><br>
+		*New name: <input type='text' placeholder={{r.name}} name='new_name' >
 		<input type='submit' value='Edit'>
 		<input type='reset' value='Reset'>		
 		</form>
