@@ -10,6 +10,7 @@ from requests_oauthlib import OAuth2Session
 import httplib2
 import json
 import requests
+import forms
 app = Flask(__name__)
 
 
@@ -277,18 +278,39 @@ def restaurantNew():
     if 'username' not in login_session:
         return redirect('/login')
     restaurant = session.query(Restaurant)
-    if request.method == 'POST':
-        newRestaurantName = Restaurant(
-            name = request.form['name'], 
-            image = request.form['image'], 
-            user_id=login_session['user_id'])
-        session.add(newRestaurantName)
-        print newRestaurantName
-        session.commit()
+    form = forms.RestaurantForm(request.form)
+    if request.method == 'POST' and form.validate():
+        new_restaurant = {
+                    'name': form.name.data, 
+                    'address': form.address.data,
+                    'city': form.city.data,
+                    'state': form.state.data,
+                    'zipCode': form.zipCode.data,
+                    'website': form.website.data,
+                    'image': form.image.data,
+                    'user_id': login_session['user_id']}
+        createRestaurant(new_restaurant)
         flash("New restaurant created!")
         return redirect(url_for('restaurants'))
     else:
-        return render_template('restaurantNew.html', restaurant = restaurant)
+        return render_template('restaurantNew.html', 
+            restaurant = restaurant, 
+            form = form)
+
+
+#Method for creating a restaurant.
+def createRestaurant(new_restaurant):
+    newRestaurant = Restaurant(
+        name = new_restaurant['name'],
+        address = new_restaurant['address'],
+        city = new_restaurant['city'],
+        state = new_restaurant['state'],
+        zipCode = new_restaurant['zipCode'],
+        website = new_restaurant['website'],
+        image = new_restaurant['image'],
+        user_id = new_restaurant['user_id'])
+    session.add(newRestaurant)
+    session.commit()
 
 
 #shows the form for editing the name of a restaurant
@@ -301,20 +323,46 @@ def restaurantEdit(restaurant_id):
         r
     if r.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to delete this restaurant. Please create your own restaurant in order to delete.');}</script><body onload='myFunction()''>"
-
-    if request.method == 'POST':
-        editRName = Restaurant(
-            name = request.form['new_name'],
-            user_id = login_session['user_id'],
-            image = request.form['new_image'])
-        for r in restaurant:
-            r.name = editRName.name
-        session.add(r)
-        session.commit()
-        flash("A restaurant was edited, it is now called %s." % r.name)
+    form = forms.RestaurantForm(request.form)
+    if request.method == 'POST' and form.validate():
+        edit_restaurant = {
+                    'name': form.name.data, 
+                    'address': form.address.data,
+                    'city': form.city.data,
+                    'state': form.state.data,
+                    'zipCode': form.zipCode.data,
+                    'website': form.website.data,
+                    'image': form.image.data}
+        editRestaurant(edit_restaurant, restaurant_id)
+        flash("%s has been edited." % r.name)
         return redirect(url_for('restaurants'))
     else:
-        return render_template('restaurantEdit.html', restaurant = restaurant)
+        return render_template('restaurantEdit.html', 
+            restaurant = restaurant,
+            form = form)
+
+
+#Method for creating a restaurant.
+def editRestaurant(edit_restaurant, restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(restaurant_id = restaurant_id)
+    updateRestaurant = Restaurant(
+        name = edit_restaurant['name'],
+        address = edit_restaurant['address'],
+        city = edit_restaurant['city'],
+        state = edit_restaurant['state'],
+        zipCode = edit_restaurant['zipCode'],
+        website = edit_restaurant['website'],
+        image = edit_restaurant['image'])
+    for r in restaurant:
+        r.name = updateRestaurant.name
+        r.address = updateRestaurant.address
+        r.city = updateRestaurant.city
+        r.state = updateRestaurant.state
+        r.zipCode = updateRestaurant.zipCode
+        r.website = updateRestaurant.website
+        r.image = updateRestaurant.image
+    session.add(r)
+    session.commit()
 
 
 #shows the form for deleting a restaurant
@@ -368,7 +416,8 @@ def menuItemNew(restaurant_id):
         return redirect('/login')
     user_id=login_session['user_id']
     restaurant = session.query(Restaurant).filter_by(restaurant_id=restaurant_id)
-    if request.method == 'POST':
+    form = forms.MenuItemForm(request.form)
+    if request.method == 'POST' and form.validate():
         newItem = MenuItem(
             name = request.form['name'], 
             course = request.form['course'],
@@ -381,7 +430,9 @@ def menuItemNew(restaurant_id):
         flash("A menu item has been created: %s" % newItem.name)
         return redirect(url_for('restaurantMenu', restaurant_id = restaurant_id))
     else:
-        return render_template('menuItemNew.html', restaurant = restaurant)
+        return render_template('menuItemNew.html', 
+            restaurant = restaurant, 
+            form = form)
 
 
 #shows the form for editing menu items for a selected restaurant
@@ -395,26 +446,30 @@ def menuItemEdit(restaurant_id, menu_id):
     if r.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to delete this restaurant. Please create your own restaurant in order to delete.');}</script><body onload='myFunction()''>"
     items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id, menu_id = menu_id)
-    if request.method == 'POST':
+    form = forms.MenuItemForm(request.form)
+    if request.method == 'POST' and form.validate():
         editItem = MenuItem(
-            name = request.form['new_name'], 
-            course = request.form['new_course'],
-            description = request.form['new_description'],
-            price = request.form['new_price'], 
-            restaurant_id = restaurant_id, 
-            user_id=restaurant.user_id
+            name = request.form['name'], 
+            course = request.form['course'],
+            description = request.form['description'],
+            image = request.form['image'],
+            price = request.form['price']
             )
         for i in items:
             i.name = editItem.name
             i.course = editItem.course
             i.description = editItem.description
+            i.image = editItem.image
             i.price = editItem.price
         session.add(i)
         session.commit()
         flash("%s has been edited." % editItem.name)
         return redirect(url_for('restaurantMenu', restaurant_id = restaurant_id))
     else:
-        return render_template('menuItemEdit.html', restaurant = restaurant, items = items)
+        return render_template('menuItemEdit.html', 
+            restaurant = restaurant, 
+            items = items,
+            form = form)
 
 
 #shows the form for deleting menu items for a selected restaurant
@@ -470,7 +525,7 @@ def createUser(login_session):
     session.commit()
     user = session.query(User).filter_by(email = login_session['email']).one()
     print "User %s created." % user.name
-    getUserInfo(user_id)
+    getUserInfo()
     user_id=login_session['user_id']
     return user.user_id
 

@@ -1,15 +1,88 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
-		Please enter the name of your new restaurant:
-		<form method ='POST' enctype ='multipart/form-data' actions='/restaurantnew'>
-		
-		<input type='text' placeholder='Type your new name here.' name='name' ><br>
-		<input type='text' placeholder='Type the url of your restaurant image here.' name='image' ><br>
-		<input type='submit' value='Add Restaurant'>
-		<input type='reset' value='Reset'>
-		</form>
-		<a href='{{url_for('restaurants')}}'>Cancel and return to list of Restaurants.</a>
-		</br>
-		</br>
+	<h1>New Restaurant Form</h1>
+        <form method ='POST' actions='/restaurantNew' enctype="multipart/form-data" id='ownerNew'>
+            {{ form.csrf_token }}
+        <div class="form-group col-xs-4">
+            <label for="restaurant-name">Name</label>
+            {{ form.name(class="form-control", placeholder="Name") }}
+            {% if form.name.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.name.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group col-xs-12">
+            <label for="restaurant-address">Address</label>
+            {{ form.address(class="form-control", placeholder="Address") }}
+            {% if form.address.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.address.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group col-xs-4">
+            <label for="restaurant-city">City</label>
+            {{ form.city(class="form-control", placeholder="City") }}
+            {% if form.city.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.city.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group col-xs-4">
+            <label for="restaurant-state">State</label>
+            {{ form.state(class="form-control", placeholder="State") }}
+            {% if form.state.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.state.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group col-xs-4">
+            <label for="restaurant-zipCode">Zip Code</label>
+            {{ form.zipCode(class="form-control", placeholder="Zip Code") }}
+            {% if form.zipCode.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.zipCode.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group col-xs-4">
+            <label for="restaurant-website">website</label>
+            {{ form.website(class="form-control", placeholder="website") }}
+            {% if form.website.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.website.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group col-xs-8">
+            <label for="restaurant-image">Image</label>
+            {{ form.image(class="form-control", placeholder="image URL") }}
+            {% if form.image.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.image.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+            <input class="btn btn-success" type='submit' value='Create'>
+            <input class="btn btn-warning" type='reset' value='Reset'></br>
+        </form>
+		<a href='{{url_for('restaurants')}}' class="btn btn-info">Cancel and return to list of Restaurants.</a>
 {% endblock %}

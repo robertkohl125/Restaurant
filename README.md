@@ -1,7 +1,7 @@
 Restaurant
 ==========
 
-This project sets up a restaurant website using a database. The repository contains the restaurantDBsetup.py that sets up the database, the lotsOfMenus.py that populates my database with restaurants and menus, and two programs that create a web server. webserver.py demonstrates some basic HTML GET and POST functions on port 8080, and project.py creates a more well developed web server on port 5000. project.py also utilizes CSS style sheets, JSON returns and utilizes the Google+ API for login.
+This project sets up a restaurant website using a database. The repository contains the restaurantDBsetup.py that sets up the database, the lotsOfMenus.py that populates my database with restaurants and menus, and project.py which creates a web server on port 5000. Project.py also utilizes CSS style sheets, JSON returns and utilizes the Google+ API for login as well as demonstrates CRUD operators for all items.
 
 Technology
 ----------
@@ -11,36 +11,40 @@ Special modules:
 	-SQLAlchemy
 	-BaseHTTPServer
 	-FLask
+	-WTForms
 -Oracle VM VirtualBox 5.0.4
 -Vagrant 1.7.4
 -Google+ OAuth2 API
 -Facebook OAuth2 API
 
-Bugs
-----
-Facebook login working but not passing login as user.
-
-
 Files
 -----
--ReadMe.md
--client_secrets.json
--lotsOfMenus.py
+/flask-wft
+/static
+	/black_user.gif
+	/styles.css
+	/top-banner.jpg
+/templates
+	/header.html
+	/login.html
+	/main.html
+	/menu.html
+	/menuItemDelete.html
+	/menuItemEdit.html
+	/menuItemNew.html
+	/publicmenu.html
+	/publicrestaurants.html
+	/restaurantDelete.html
+	/restaurantEdit.html
+	/restaurantNew.html
+	/restaurants.html
+/ReadMe.md
+/fb_client_secrets.json
+/g_client_secrets.json
+-lotsOfMenusUserDB.py
 -project.py
--restaurantCRUD.py
+-forms.py
 -restaurantDBSetup.py
--webserver.py
--templates/login.html
--templates/menu.html
--templates/menuDelete.html
--templates/menuEdit.html
--templates/menuNew.html
--templates/restaurants.html
--templates/restaurantDelete.html
--templates/restaurantEdit.html
--templates/restaurantNew.html
--templates/restaurant.html
--static/styles.css
 
 To Begin
 --------
@@ -54,9 +58,7 @@ To Begin
 $ python restaurantDBSetup.py
 -Then run lotsOfMenus.py to add restaurants and menus to the database using 
 $ python lotsOfMenus.py
--Then run webserver.py or project.py.
-$ python webserver.py
-	-or- 
+-Then run project.py using
 $ python project.py
 
 Contribute
