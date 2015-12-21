@@ -17,7 +17,6 @@
             data-approvalprompt="force">
         </span>
     </div>
-
     <script>
     function signInCallback(authResult) {
         if (authResult['code']){
@@ -30,7 +29,7 @@
                 data:authResult['code'],
                 success:function(result) {
                     if (result) {
-                        $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+                        $('#result').html('Google+ Login Successful!</br>'+ result + '</br>Redirecting...')
                         setTimeout(function() {
                             window.location.href = "/restaurants";
                         }, 4000);
@@ -47,7 +46,6 @@
     <!-- END GOOGLE PLUS SIGN IN-->
 
     <!-- FACEBOOK SIGN IN-->
-
     <script>
     window.fbAsyncInit = function() {
         FB.init({
@@ -64,12 +62,11 @@
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
     </script>
-
     <script>
         function sendTokenToServer() {
             var access_token = FB.getAuthResponse()['accessToken'];
             console.log(access_token)
-            console.log('Welcome!  Fetching your access token... ');
+            console.log('Welcome!  Fetching your Facebook access token... ');
             FB.api('/me', function(response) {
                 console.log('Successful login for ' + response.name + '.');
                 $.ajax({
@@ -93,13 +90,11 @@
             });
         }
     </script>
-
     <div id="fb-root"></div>
     <fb:login-button data-show-faces="true" data-size="large" scope="public_profile, email" onlogin="sendTokenToServer();">
         <a href='javascript:sendTokenToServer()'>Log In with Facebook</a>
     </fb:login-button>
     <div id='result'></div>
-
     <!-- END FACEBOOK SIGN IN-->
 
 </body>

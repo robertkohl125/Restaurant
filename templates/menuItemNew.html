@@ -1,9 +1,7 @@
-<html>
-<head>	
-	<link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css') }}"
-</head>
-	<body>
-		{% for r in restaurant %}
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	{% for r in restaurant %}
 		<h2>{{r.name}}</h2>
 		<div>
 		<fieldset>
@@ -25,7 +23,6 @@
 		<input type='submit' value='Create'>
 		<input type='reset' value='Reset'></br></br></br></br>
 		<a href='{{url_for('restaurantMenu', restaurant_id = r.restaurant_id)}}'>Click here to cancel and return to menu.</a>
-		{% endfor %}
+	{% endfor %}
 		</div>
-	</body>
-</html>
+{% endblock %}

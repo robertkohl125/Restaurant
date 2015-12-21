@@ -1,14 +1,12 @@
-<html>
-<head>	
-	<link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css') }}"
-</head>
-	<body>
-		{% for r in restaurant %}
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	{% for r in restaurant %}
 		<fieldset>
 		<legend>{{r.name}}</legend>
 		<p>{{r.name}}
-		{% endfor %}
-		{%for i in items%}		
+	{% endfor %}
+	{%for i in items%}		
 		{{i.name}} 
 		<p>{{i.course}}<br>
 		{{i.description}}<br>
@@ -20,10 +18,8 @@
 		<br>CANNOT BE UNDONE!</p>
 		<input type='submit' value='Delete'>
 		</form>
-
-		{% endfor %}
-		{% for r in restaurant %}
+	{% endfor %}
+	{% for r in restaurant %}
 		<a href='{{url_for('restaurantMenu', restaurant_id = r.restaurant_id)}}'>Cancel and return to menu.</a>
-		{% endfor %}
-	</body>
-</html>
+	{% endfor %}
+{% endblock %}

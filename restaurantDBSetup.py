@@ -27,6 +27,7 @@ class Restaurant(Base):
     
     restaurant_id = Column(Integer, primary_key = True)
     name = Column(String(80), nullable = False)
+    image = Column(String(250))
     user_id = Column(Integer, ForeignKey('user.user_id'))
     user = relationship(User)
 
@@ -41,6 +42,7 @@ class MenuItem(Base):
     name = Column(String(80), nullable = False)
     course = Column(String(250))
     description = Column(String(250))
+    image = Column(String(250))
     price = Column(String(8))
     restaurant_id = Column(Integer, ForeignKey('restaurant.restaurant_id'))
     restaurant = relationship(Restaurant)
@@ -59,7 +61,6 @@ class MenuItem(Base):
             'restaurant_id':self.restaurant_id,
             'user_id':self.user_id,
         }
-
 
 
 engine = create_engine('sqlite:///restaurant-menuitem-user.db')

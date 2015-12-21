@@ -1,13 +1,10 @@
-<html>
-<head>	
-	<link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css') }}"
-</head>
-	<body>
-		{% for r in restaurant %}
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	{% for r in restaurant %}
 		<h2>{{r.name}}</h2>
 		<a href='{{url_for('restaurants')}}'>Click here to return to list of Restaurants.</a></br>
 		<a href='{{url_for('restaurantMenuJSON', restaurant_id = r.restaurant_id)}}'>Click here to view JSON.</a></br>
-
 		{% with messages = get_flashed_messages() %}
 			{% if messages %}
 				<ul>
@@ -19,8 +16,8 @@
 		{% endwith %}
 
 		<h3><a href='{{url_for('menuItemNew', restaurant_id = r.restaurant_id)}}'>*Click here to add New Item*</a></h3>
-		{% endfor %}
-		{% for i in items %}
+	{% endfor %}
+	{% for i in items %}
 		<h3>{{i.course}}</h3>
 		<p>{{i.name}}</p>
 		<p>{{i.description}}</p>
@@ -32,6 +29,5 @@
 		</br>
 		</br>
 		</br>
-		{% endfor %}
-	</body>
-</html>
+	{% endfor %}
+{% endblock %}

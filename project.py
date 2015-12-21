@@ -1,22 +1,17 @@
-from flask import Flask, render_template, url_for, request, redirect, flash, jsonify
-app = Flask(__name__)
-
+from flask import Flask, render_template, url_for, request, redirect, flash, jsonify, make_response
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from restaurantDBSetup import Base, Restaurant, MenuItem, User
-
 from flask import session as login_session
 import random, string
-
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from requests_oauthlib import OAuth2Session
 import httplib2
 import json
-from flask import make_response
 import requests
+app = Flask(__name__)
 
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
-APPLICATION_NAME = "Restaurant Menu Application"
 
 engine = create_engine('sqlite:///restaurant-menuitem-user.db')
 Base.metadata.bind = engine
@@ -33,6 +28,7 @@ def showLogin():
     return render_template('login.html', STATE = state)
 
 
+#Route for Google+ OAuth2 from login.html
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     if request.args.get('state') != login_session['state']:
@@ -41,7 +37,7 @@ def gconnect():
         return response
     code = request.data
     try:
-        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets('g_client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -49,7 +45,7 @@ def gconnect():
             json.dumps('failed to upgrade the authorization code.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    
+    CLIENT_ID = json.loads(open('g_client_secrets.json', 'r').read())['web']['client_id']
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
     h = httplib2.Http()
@@ -98,7 +94,7 @@ def gconnect():
         login_session['user_id'] = user_id
 
     output = ''
-    output += '<h2>Welcome '
+    output += '<h2>Welcome Google+ user '
     output += login_session['username']
     output += '!</h2>'
     output += '<h4><b>gplus_id:</b>'
@@ -120,6 +116,7 @@ def gconnect():
     return output
 
 
+#Route for Google+ OAuth2 disconnect()
 @app.route("/gdisconnect")
 def gdisconnect():
     credentials = login_session.get('credentials')
@@ -142,6 +139,7 @@ def gdisconnect():
         return response
 
 
+#Route for Facebook OAuth2 from login.html
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
     if request.args.get('state') != login_session['state']:
@@ -191,7 +189,7 @@ def fbconnect():
         login_session['user_id'] = user_id
 
     output = ''
-    output += '<h2>Welcome '
+    output += '<h2>Welcome Facebook user '
     output += login_session['username']
     output += '!</h2>'
     output += '<h4><b>facebook_id:</b>'
@@ -213,6 +211,7 @@ def fbconnect():
     return output
 
 
+#Route for Facebook OAuth2 disconnect()
 @app.route('/fbdisconnect')
 def fbdisconnect():
     facebook_id = login_session['facebook_id']
@@ -223,6 +222,8 @@ def fbdisconnect():
     return "You have been logged out."
 
 
+
+#Route for disconnect and routes to proper disconnect method()
 @app.route('/disconnect')
 def disconnect():
     if 'provider' in login_session:
@@ -234,9 +235,9 @@ def disconnect():
             fbdisconnect()
             del login_session['facebook_id']
         del login_session['username']
+        del login_session['user_id']
         del login_session['email']
         del login_session['picture']
-        del login_session['user_id']
         flash("You have been logged out.")
         return redirect(url_for('restaurants'))
     else:
@@ -278,9 +279,11 @@ def restaurantNew():
     restaurant = session.query(Restaurant)
     if request.method == 'POST':
         newRestaurantName = Restaurant(
-            name = request.form['new_name'], 
+            name = request.form['name'], 
+            image = request.form['image'], 
             user_id=login_session['user_id'])
         session.add(newRestaurantName)
+        print newRestaurantName
         session.commit()
         flash("New restaurant created!")
         return redirect(url_for('restaurants'))
@@ -293,13 +296,17 @@ def restaurantNew():
 def restaurantEdit(restaurant_id):
     if 'username' not in login_session:
         return redirect('/login')
-    restaurant = session.query(Restaurant).filter_by(restaurant_id = restaurant_id).one()
-    if restaurant.user_id != login_session['user_id']:
+    restaurant = session.query(Restaurant).filter_by(restaurant_id = restaurant_id)
+    for r in restaurant:
+        r
+    if r.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to delete this restaurant. Please create your own restaurant in order to delete.');}</script><body onload='myFunction()''>"
 
     if request.method == 'POST':
         editRName = Restaurant(
-            name = request.form['new_name'])
+            name = request.form['new_name'],
+            user_id = login_session['user_id'],
+            image = request.form['new_image'])
         for r in restaurant:
             r.name = editRName.name
         session.add(r)
@@ -315,8 +322,10 @@ def restaurantEdit(restaurant_id):
 def restaurantDelete(restaurant_id):
     if 'username' not in login_session:
         return redirect('/login')
-    restaurant = session.query(Restaurant).filter_by(restaurant_id = restaurant_id).one()
-    if restaurant.user_id != login_session['user_id']:
+    restaurant = session.query(Restaurant).filter_by(restaurant_id = restaurant_id)
+    for r in restaurant:
+        r
+    if r.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to delete this restaurant. Please create your own restaurant in order to delete.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
         for r in restaurant:
@@ -339,8 +348,7 @@ def restaurantMenu(restaurant_id):
     for r in restaurant:
         r.user_id
     creator = getUserInfo(r.user_id)
-    print login_session['username'], creator.name, creator.user_id
-    if (login_session['username'] not in login_session) or (creator.user_id != login_session['user_id']):
+    if 'username' not in login_session or creator.user_id != login_session['user_id']:
         return render_template('publicmenu.html', 
             restaurant = restaurant, 
             items = items,
@@ -358,8 +366,8 @@ def restaurantMenu(restaurant_id):
 def menuItemNew(restaurant_id):
     if 'username' not in login_session:
         return redirect('/login')
-    restaurant = session.query(Restaurant).filter_by(restaurant_id=restaurant_id).one()
-#    items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id)
+    user_id=login_session['user_id']
+    restaurant = session.query(Restaurant).filter_by(restaurant_id=restaurant_id)
     if request.method == 'POST':
         newItem = MenuItem(
             name = request.form['name'], 
@@ -367,7 +375,7 @@ def menuItemNew(restaurant_id):
             description = request.form['description'],
             price = request.form['price'], 
             restaurant_id = restaurant_id, 
-            user_id=restaurant.user_id)
+            user_id=user_id)
         session.add(newItem)
         session.commit()
         flash("A menu item has been created: %s" % newItem.name)
@@ -381,10 +389,12 @@ def menuItemNew(restaurant_id):
 def menuItemEdit(restaurant_id, menu_id):
     if 'username' not in login_session:
         return redirect('/login')
-    restaurant = session.query(Restaurant).filter_by(restaurant_id = restaurant_id).one()
-    items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id, menu_id = menu_id)
-    if restaurant.user_id != login_session['user_id']:
+    restaurant = session.query(Restaurant).filter_by(restaurant_id = restaurant_id)
+    for r in restaurant:
+        r
+    if r.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to delete this restaurant. Please create your own restaurant in order to delete.');}</script><body onload='myFunction()''>"
+    items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id, menu_id = menu_id)
     if request.method == 'POST':
         editItem = MenuItem(
             name = request.form['new_name'], 
@@ -412,9 +422,11 @@ def menuItemEdit(restaurant_id, menu_id):
 def menuItemDelete(restaurant_id, menu_id):
     if 'username' not in login_session:
         return redirect('/login')
-    restaurant = session.query(Restaurant).filter_by(restaurant_id = restaurant_id).one()
     items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id, menu_id = menu_id)
-    if restaurant.user_id != login_session['user_id']:
+    restaurant = session.query(Restaurant).filter_by(restaurant_id = restaurant_id)
+    for r in restaurant:
+        r
+    if r.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to delete this restaurant. Please create your own restaurant in order to delete.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
         for i in items:
@@ -427,27 +439,39 @@ def menuItemDelete(restaurant_id, menu_id):
         return render_template('menuItemDelete.html', restaurant = restaurant, items = items)
 
 
-#
+#Method to get user id from email address.
 def getUserID(email):
     try:
         user = session.query(User).filter_by(email = email).one()
+        print user.user_id
         return user.user_id
     except:
         return None
 
 
+#Method to get user info from user id.
 def getUserInfo(user_id):
     user = session.query(User).filter_by(user_id = user_id).one()
+    print 'getUserInfo():'
+    print user.user_id
+    print user.name
+    print user.email
+    print user.picture
     return user
 
 
-#
+#Creates a user from login_session data in User table
 def createUser(login_session):
+    print 'createUser():'
+    print login_session['username']
+    print login_session['email']
     newUser = User(name = login_session['username'], email = login_session['email'], picture = login_session['picture'])
     session.add(newUser)
     session.commit()
     user = session.query(User).filter_by(email = login_session['email']).one()
     print "User %s created." % user.name
+    getUserInfo(user_id)
+    user_id=login_session['user_id']
     return user.user_id
 
 
