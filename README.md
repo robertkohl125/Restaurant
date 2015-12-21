@@ -23,7 +23,7 @@ Files
 /static
 	/black_user.gif
 	/styles.css
-	/top-banner.jpg
+	/top-banner.jpg *from Udacity Full Stack Foundations course
 /templates
 	/header.html
 	/login.html
