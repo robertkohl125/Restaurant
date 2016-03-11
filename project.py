@@ -533,4 +533,4 @@ def createUser(login_session):
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host = '0.0.0.0', port = 5000) #listen on all public IP addresses for port 5000
+    app.run(host = '0.0.0.0', port = 8080) #listen on all public IP addresses for port 5000
