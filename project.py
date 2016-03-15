@@ -14,7 +14,7 @@ import forms
 app = Flask(__name__)
 
 
-engine = create_engine('sqlite:///restaurant-menuitem-user.db')
+engine = create_engine('postgresql://catalog:catalog@locathost/itemcatalog.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind = engine)
 session = DBSession()

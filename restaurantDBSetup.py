@@ -69,5 +69,8 @@ class MenuItem(Base):
         }
 
 
-engine = create_engine('sqlite:///restaurant-menuitem-user.db')
+#Connect to PostgreSQL database on server with user 'catalog', password 'catalog'
+engine = create_engine('postgresql://catalog:catalog@locathost/itemcatalog.db')
 Base.metadata.create_all(engine) 
+
+#restaurant-menuitem-user
