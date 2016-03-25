@@ -70,7 +70,7 @@ class MenuItem(Base):
 
 
 #Connect to PostgreSQL database on server with user 'catalog', password 'catalog'
-engine = create_engine('postgresql://catalog:catalog@localhost/catalog.db')
+engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
 Base.metadata.create_all(engine) 
 
 #restaurant-menuitem-user
