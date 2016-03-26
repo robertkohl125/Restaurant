@@ -1,0 +1,71 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	{% for r in restaurant %}
+		{% for i in items %}
+        <h2>Edit <i>{{i.name}}</i> Form for <i>{{r.name}}</i></h2>
+        <form method ='POST' actions='/menuItemNew' enctype="multipart/form-data">
+            {{ form.csrf_token }}
+        <div class="form-group col-xs-6">
+            <label for="menuItemNew-name">{{i.name}}</label>
+            {{ form.name(class="form-control", placeholder="Name") }}
+            {% if form.name.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.name.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group col-xs-3">
+            <label for="menuItemNew-course">{{i.course}}</label>
+            {{ form.course(class="form-control") }}
+            {% if form.course.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.course.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group col-xs-3">
+            <label for="menuItemNew-price">${{i.price}}</label>
+            {{ form.price(class="form-control", placeholder="Price") }}
+            {% if form.price.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.price.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group col-xs-12">
+            <label for="menuItemNew-description"><h6><i>{{i.description}}</i></h6></label>
+            {{ form.description(class="form-control", placeholder="Describe your dish here.") }}
+            {% if form.description.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.description.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group col-xs-12">
+            <label for="menuItemNew-image">{{i.image}}</label>
+            {{ form.image(class="form-control", placeholder="Image") }}
+            {% if form.image.errors %}
+                <div class="alert alert-info" role="alert">
+                    {% for error in form.image.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+            <input class="btn btn-success" type='submit' value='Edit'>
+            <input class="btn btn-warning" type='reset' value='Reset'>
+            <a class="btn btn-info" href='{{url_for('restaurantMenu', restaurant_id = r.restaurant_id)}}'>Click here to cancel and return to menu.</a>
+        </form>
+        </div>
+	{% endfor %}
+	{% endfor %}
+{% endblock %}
