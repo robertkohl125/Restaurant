@@ -14,7 +14,7 @@ import forms
 app = Flask(__name__)
 
 
-engine = create_engine('postgresql://catalog:catalog@catalog')
+engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind = engine)
 session = DBSession()
