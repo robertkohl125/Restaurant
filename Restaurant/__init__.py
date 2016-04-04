@@ -14,7 +14,7 @@ import forms
 app = Flask(__name__)
 
 
-engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
+engine = create_engine('postgresql://catalog:catalog@127.0.0.1/catalog')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind = engine)
 session = DBSession()
@@ -38,7 +38,7 @@ def gconnect():
         return response
     code = request.data
     try:
-        oauth_flow = flow_from_clientsecrets('g_client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets('/var/www/Restaurant/Restaurant/g_client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
