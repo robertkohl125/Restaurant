@@ -46,7 +46,7 @@ def gconnect():
             json.dumps('failed to upgrade the authorization code.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    CLIENT_ID = json.loads(open('g_client_secrets.json', 'r').read())['web']['client_id']
+    CLIENT_ID = json.loads(open('/var/www/Restaurant/Restaurant/g_client_secrets.json', 'r').read())['web']['client_id']
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
     h = httplib2.Http()
